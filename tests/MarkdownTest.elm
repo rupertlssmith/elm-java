@@ -9,11 +9,13 @@ import Html
 import Html.Attributes exposing (id)
 import Markdown
 import Dict
+import Test exposing (..)
+import Expect exposing (Expectation)
 
 
-assertEqualPair : ( a, a ) -> Assertion
+assertEqualPair : ( a, a ) -> Expectation
 assertEqualPair ( left, right ) =
-    assertEqual left right
+    Expect.equal left right
 
 
 emptyBlock : Html.Html msg
@@ -81,17 +83,23 @@ fullBlockWithAttrsDecoded =
 
 nodeTests : Test
 nodeTests =
-    suite "Node tests"
+    concat
         [ test "empty markdown are empty as a string" <|
-            assertEqualPair ( emptyBlockAsString, htmlToString emptyBlock )
+            \_ ->
+                (assertEqualPair ( emptyBlockAsString, htmlToString emptyBlock ))
         , test "empty markdown are decoded to empty custom nodes" <|
-            assertEqualPair ( emptyBlockDecoded, nodeTypeFromHtml emptyBlock )
+            \_ ->
+                (assertEqualPair ( emptyBlockDecoded, nodeTypeFromHtml emptyBlock ))
         , test "full markdown are full as a string" <|
-            assertEqualPair ( fullBlockAsString, htmlToString fullBlock )
+            \_ ->
+                (assertEqualPair ( fullBlockAsString, htmlToString fullBlock ))
         , test "full markdown are decoded to full custom nodes" <|
-            assertEqualPair ( fullBlockDecoded, nodeTypeFromHtml fullBlock )
+            \_ ->
+                (assertEqualPair ( fullBlockDecoded, nodeTypeFromHtml fullBlock ))
         , test "attributes have no effect on the model" <|
-            assertEqualPair ( fullBlockAsString, htmlToString fullBlockWithAttrs )
+            \_ ->
+                (assertEqualPair ( fullBlockAsString, htmlToString fullBlockWithAttrs ))
         , test "markdown preserves attributes as facts" <|
-            assertEqualPair ( fullBlockWithAttrsDecoded, nodeTypeFromHtml fullBlockWithAttrs )
+            \_ ->
+                (assertEqualPair ( fullBlockWithAttrsDecoded, nodeTypeFromHtml fullBlockWithAttrs ))
         ]

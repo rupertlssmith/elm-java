@@ -6,13 +6,15 @@ import Html.Events
 import HtmlQuery exposing (..)
 import HtmlToString exposing (..)
 import String
+import Test exposing (..)
+import Expect exposing (Expectation)
 
 
 darthVader : Html.Html Msg
 darthVader =
     Html.div []
         [ Html.p [] [ Html.text "Luke I'm your father." ]
-        , Html.App.map SubComp lukeSkywalker
+        , Html.map SubComp lukeSkywalker
         ]
 
 
@@ -20,9 +22,9 @@ lukeSkywalker : Html.Html SubMsg
 lukeSkywalker =
     Html.div []
         [ Html.button [ Html.Events.onClick LightSide ] [ Html.text "nooo" ]
-        , Html.App.map SubSubComp r2d2
-        , Html.App.map SubSubComp (Html.div [ Html.Attributes.class "force" ] [])
-        , Html.App.map SubSubComp (Html.text "Han shot first")
+        , Html.map SubSubComp r2d2
+        , Html.map SubSubComp (Html.div [ Html.Attributes.class "force" ] [])
+        , Html.map SubSubComp (Html.text "Han shot first")
         ]
 
 
@@ -46,25 +48,35 @@ type SubSubMsg
 
 all : Test
 all =
-    suite "tea tests"
+    concat
         [ test "should render the parent view" <|
-            assertEqual 1 <|
-                List.length <|
-                    queryByTagname "p" darthVader
+            \_ ->
+                (Expect.equal 1 <|
+                    List.length <|
+                        queryByTagname "p" darthVader
+                )
         , test "should render child views" <|
-            assertEqual 1 <|
-                List.length <|
-                    queryByTagname "button" darthVader
+            \_ ->
+                (Expect.equal 1 <|
+                    List.length <|
+                        queryByTagname "button" darthVader
+                )
         , test "should render child views of child views" <|
-            assertEqual 1 <|
-                List.length <|
-                    queryByTagname "span" darthVader
-        , test "should work when Html.App.map a empty div" <|
-            assertEqual 1 <|
-                List.length <|
-                    queryByClassname "force" darthVader
-        , test "should work when Html.App.map a text node" <|
-            assertEqual True <|
-                String.contains "Han shot first" <|
-                    htmlToString darthVader
+            \_ ->
+                (Expect.equal 1 <|
+                    List.length <|
+                        queryByTagname "span" darthVader
+                )
+        , test "should work when Html.map a empty div" <|
+            \_ ->
+                (Expect.equal 1 <|
+                    List.length <|
+                        queryByClassname "force" darthVader
+                )
+        , test "should work when Html.map a text node" <|
+            \_ ->
+                (Expect.equal True <|
+                    String.contains "Han shot first" <|
+                        htmlToString darthVader
+                )
         ]
