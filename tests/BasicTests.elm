@@ -436,7 +436,7 @@ queryTests =
                 \_ ->
                     assertEqualPair
                         ( [ emptyDivWithManyAttributesDecoded ]
-                        , queryByAttribute "width" "50" (Html.div [] [ p1, emptyDivWithManyAttributes, p3 ])
+                        , queryByAttribute "value" "cat" (Html.div [] [ p1, emptyDivWithManyAttributes, p3 ])
                         )
             , test "query by classlist returns an empty list if no matches" <|
                 \_ ->
