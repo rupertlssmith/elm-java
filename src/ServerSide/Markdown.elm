@@ -2,7 +2,7 @@ module ServerSide.Markdown exposing (..)
 
 import Dict exposing (Dict)
 import Json.Encode
-import Json.Decode exposing ((:=))
+import Json.Decode exposing (field)
 
 
 baseMarkdownModel : MarkdownModel
@@ -15,6 +15,7 @@ baseMarkdownModel =
         }
     , markdown = ""
     }
+
 
 type alias MarkdownOptions =
     { githubFlavored : Maybe { tables : Bool, breaks : Bool }
@@ -41,13 +42,12 @@ encodeOptions options =
 encodeMarkdownModel : MarkdownModel -> Json.Decode.Value
 encodeMarkdownModel model =
     Json.Encode.object
-        [ ("options", encodeOptions model.options )
+        [ ( "options", encodeOptions model.options )
         , ( "markdown", Json.Encode.string model.markdown )
         ]
 
 
 decodeMarkdownModel : Json.Decode.Decoder MarkdownModel
 decodeMarkdownModel =
-    Json.Decode.object1 (MarkdownModel baseMarkdownModel.options)
-        ( "markdown" := Json.Decode.string )
-
+    Json.Decode.map (MarkdownModel baseMarkdownModel.options)
+        (field "markdown" Json.Decode.string)

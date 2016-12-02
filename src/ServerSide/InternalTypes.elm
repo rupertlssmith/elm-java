@@ -13,8 +13,7 @@ module ServerSide.InternalTypes
 
 import Dict exposing (Dict)
 import Json.Encode
-import Json.Decode exposing ((:=))
-
+import Json.Decode exposing (field)
 import ServerSide.Markdown exposing (..)
 import ServerSide.Constants exposing (..)
 import ServerSide.Helpers exposing (..)
@@ -47,6 +46,7 @@ type alias MarkdownNodeRecord =
     , model : MarkdownModel
     }
 
+
 type alias CustomNodeRecord =
     { facts : Facts
     , model : Json.Decode.Value
@@ -63,10 +63,23 @@ type alias Facts =
     }
 
 
+customDecoder decoder toResult =
+    Json.Decode.andThen
+        (\a ->
+            case toResult a of
+                Ok b ->
+                    Json.Decode.succeed b
+
+                Err err ->
+                    Json.Decode.fail err
+        )
+        decoder
+
+
 decodeNodeType : Json.Decode.Decoder NodeType
 decodeNodeType =
-    ("type" := Json.Decode.string)
-        |> (flip Json.Decode.andThen)
+    (field "type" Json.Decode.string)
+        |> (Json.Decode.andThen)
             (\typeString ->
                 case typeString of
                     "text" ->
@@ -88,7 +101,7 @@ decodeNodeType =
 
 decodeTextTag : Json.Decode.Decoder TextTagRecord
 decodeTextTag =
-    ("text" := Json.Decode.customDecoder Json.Decode.string (\text -> Ok { text = text }))
+    (field "text" (customDecoder Json.Decode.string (\text -> Ok { text = text })))
 
 
 encodeTextTag : TextTagRecord -> Json.Encode.Value
@@ -107,11 +120,11 @@ decodeTagger =
 
 decodeNode : Json.Decode.Decoder NodeRecord
 decodeNode =
-    Json.Decode.object4 NodeRecord
-        ("tag" := Json.Decode.string)
-        ("children" := Json.Decode.list decodeNodeType)
-        ("facts" := decodeFacts)
-        ("descendantsCount" := Json.Decode.int)
+    Json.Decode.map4 NodeRecord
+        (field "tag" Json.Decode.string)
+        (field "children" (Json.Decode.list decodeNodeType))
+        (field "facts" decodeFacts)
+        (field "descendantsCount" Json.Decode.int)
 
 
 encodeNodeRecord : NodeRecord -> Json.Encode.Value
@@ -123,6 +136,7 @@ encodeNodeRecord record =
         , ( "descendantsCount", Json.Encode.int record.descendantsCount )
         ]
 
+
 decodeCustomNode : Json.Decode.Decoder NodeType
 decodeCustomNode =
     Json.Decode.oneOf
@@ -133,22 +147,22 @@ decodeCustomNode =
 
 decodeCustomNodeRecord : Json.Decode.Decoder CustomNodeRecord
 decodeCustomNodeRecord =
-    Json.Decode.object2 CustomNodeRecord
-        ("facts" := decodeFacts)
-        ("model" := Json.Decode.value)
+    Json.Decode.map2 CustomNodeRecord
+        (field "facts" decodeFacts)
+        (field "model" Json.Decode.value)
 
 
 decodeMarkdownNodeRecord : Json.Decode.Decoder MarkdownNodeRecord
 decodeMarkdownNodeRecord =
-    Json.Decode.object2 MarkdownNodeRecord
-        ("facts" := decodeFacts)
-        ("model" := decodeMarkdownModel)
+    Json.Decode.map2 MarkdownNodeRecord
+        (field "facts" decodeFacts)
+        (field "model" decodeMarkdownModel)
 
 
 decodeStyles : Json.Decode.Decoder (Dict String String)
 decodeStyles =
     Json.Decode.oneOf
-        [ (styleKey := Json.Decode.dict Json.Decode.string)
+        [ (field styleKey (Json.Decode.dict Json.Decode.string))
         , Json.Decode.succeed Dict.empty
         ]
 
@@ -166,7 +180,7 @@ encodeStyles stylesDict =
 
 decodeOthers : Json.Decode.Decoder a -> Json.Decode.Decoder (Dict String a)
 decodeOthers otherDecoder =
-    Json.Decode.customDecoder (Json.Decode.dict Json.Decode.value)
+    customDecoder (Json.Decode.dict Json.Decode.value)
         (filterKnownKeys
             >> Dict.toList
             >> List.filterMap
@@ -185,10 +199,10 @@ decodeOthers otherDecoder =
 
 decodeFacts : Json.Decode.Decoder Facts
 decodeFacts =
-    Json.Decode.object6 Facts
+    Json.Decode.map6 Facts
         (decodeStyles)
-        (Json.Decode.maybe (eventKey := Json.Decode.value))
-        (Json.Decode.maybe (attributeKey := Json.Decode.value))
-        (Json.Decode.maybe (attributeNamespaceKey := Json.Decode.value))
+        (Json.Decode.maybe (field eventKey Json.Decode.value))
+        (Json.Decode.maybe (field attributeKey Json.Decode.value))
+        (Json.Decode.maybe (field attributeNamespaceKey Json.Decode.value))
         (decodeOthers Json.Decode.string)
         (decodeOthers Json.Decode.bool)
