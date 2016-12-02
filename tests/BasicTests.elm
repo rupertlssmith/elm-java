@@ -6,7 +6,6 @@ import HtmlToString exposing (..)
 import ServerSide.InternalTypes exposing (..)
 import ServerSide.Helpers exposing (..)
 import HtmlQuery exposing (..)
-import ElmTest exposing (..)
 import Html
 import Html.Attributes
 import Html.Events
@@ -312,52 +311,52 @@ countDescendents nodeType =
 textTests : Test
 textTests =
     suite "Text tests"
-        [ test "empty strings are empty results"
-            <| assertEqualPair ( emptyText, textFromHtml emptyText )
-        , test "empty strings are decoded to empty text tags"
-            <| assertEqualPair ( emptyTextDecoded, textTagTypeFromString emptyText )
-        , test "non empty strings are non empty results"
-            <| assertEqualPair ( nonEmptyText, textFromHtml nonEmptyText )
-        , test "non strings are decoded to non text tags"
-            <| assertEqualPair ( nonEmptyTextDecoded, textTagTypeFromString nonEmptyText )
+        [ test "empty strings are empty results" <|
+            assertEqualPair ( emptyText, textFromHtml emptyText )
+        , test "empty strings are decoded to empty text tags" <|
+            assertEqualPair ( emptyTextDecoded, textTagTypeFromString emptyText )
+        , test "non empty strings are non empty results" <|
+            assertEqualPair ( nonEmptyText, textFromHtml nonEmptyText )
+        , test "non strings are decoded to non text tags" <|
+            assertEqualPair ( nonEmptyTextDecoded, textTagTypeFromString nonEmptyText )
         ]
 
 
 nodeTests : Test
 nodeTests =
     suite "Node tests"
-        [ test "empty divs are empty divs as a string"
-            <| assertEqualPair ( emptyDivAsString, htmlToString emptyDiv )
-        , test "empty divs are decoded to empty div nodes"
-            <| assertEqualPair ( emptyDivDecoded, nodeTypeFromHtml emptyDiv )
-        , test "empty divs are empty divs as a string"
-            <| assertEqualPair ( emptyDivWithAddedAttributeAsString, htmlToString emptyDivWithAddedAttribute )
-        , test "empty divs are decoded to empty div nodes"
-            <| assertEqualPair ( emptyDivWithAddedAttributeDecoded, nodeTypeFromHtml emptyDivWithAddedAttribute )
-        , test "empty divs with classes get classes as a string"
-            <| assertEqualPair ( emptyDivWithAttributeAsString, htmlToString emptyDivWithAttribute )
-        , test "empty divs with classes are decoded to empty div nodes with classes"
-            <| assertEqualPair ( emptyDivWithAttributeDecoded, nodeTypeFromHtml emptyDivWithAttribute )
-        , test "empty divs with many attributes get attributes as a string"
-            <| assertEqualPair ( emptyDivWithManyAttributesAsString, htmlToString emptyDivWithManyAttributes )
-        , test "empty divs with many attributes are decoded to empty div nodes with attributes"
-            <| assertEqualPair ( emptyDivWithManyAttributesDecoded, nodeTypeFromHtml emptyDivWithManyAttributes )
-        , test "empty divs with styles get styles as a string"
-            <| assertEqualPair ( emptyDivWithStyleAsString, htmlToString emptyDivWithStyle )
-        , test "empty divs with styles are decoded to empty div nodes with styles"
-            <| assertEqualPair ( emptyDivWithStyleDecoded, nodeTypeFromHtml emptyDivWithStyle )
-        , test "divs with one non-empty text node are just a div with text"
-            <| assertEqualPair ( oneChildDivAsString, htmlToString oneChildDiv )
-        , test "divs with one non-empty text node are decoded to just a div with text"
-            <| assertEqualPair ( oneChildDivDecoded, nodeTypeFromHtml oneChildDiv )
-        , test "spans with one non-empty text node are just a span with text"
-            <| assertEqualPair ( oneChildSpanAsString, htmlToString oneChildSpan )
-        , test "spans with one non-empty text node are decoded to just a span with text"
-            <| assertEqualPair ( oneChildSpanDecoded, nodeTypeFromHtml oneChildSpan )
-        , test "forms with two non-empty text children are just a form with text"
-            <| assertEqualPair ( twoChildFormAsString, htmlToString twoChildForm )
-        , test "forms with two non-empty text children are decoded to just a form with text"
-            <| assertEqualPair ( twoChildFormDecoded, nodeTypeFromHtml twoChildForm )
+        [ test "empty divs are empty divs as a string" <|
+            assertEqualPair ( emptyDivAsString, htmlToString emptyDiv )
+        , test "empty divs are decoded to empty div nodes" <|
+            assertEqualPair ( emptyDivDecoded, nodeTypeFromHtml emptyDiv )
+        , test "empty divs are empty divs as a string" <|
+            assertEqualPair ( emptyDivWithAddedAttributeAsString, htmlToString emptyDivWithAddedAttribute )
+        , test "empty divs are decoded to empty div nodes" <|
+            assertEqualPair ( emptyDivWithAddedAttributeDecoded, nodeTypeFromHtml emptyDivWithAddedAttribute )
+        , test "empty divs with classes get classes as a string" <|
+            assertEqualPair ( emptyDivWithAttributeAsString, htmlToString emptyDivWithAttribute )
+        , test "empty divs with classes are decoded to empty div nodes with classes" <|
+            assertEqualPair ( emptyDivWithAttributeDecoded, nodeTypeFromHtml emptyDivWithAttribute )
+        , test "empty divs with many attributes get attributes as a string" <|
+            assertEqualPair ( emptyDivWithManyAttributesAsString, htmlToString emptyDivWithManyAttributes )
+        , test "empty divs with many attributes are decoded to empty div nodes with attributes" <|
+            assertEqualPair ( emptyDivWithManyAttributesDecoded, nodeTypeFromHtml emptyDivWithManyAttributes )
+        , test "empty divs with styles get styles as a string" <|
+            assertEqualPair ( emptyDivWithStyleAsString, htmlToString emptyDivWithStyle )
+        , test "empty divs with styles are decoded to empty div nodes with styles" <|
+            assertEqualPair ( emptyDivWithStyleDecoded, nodeTypeFromHtml emptyDivWithStyle )
+        , test "divs with one non-empty text node are just a div with text" <|
+            assertEqualPair ( oneChildDivAsString, htmlToString oneChildDiv )
+        , test "divs with one non-empty text node are decoded to just a div with text" <|
+            assertEqualPair ( oneChildDivDecoded, nodeTypeFromHtml oneChildDiv )
+        , test "spans with one non-empty text node are just a span with text" <|
+            assertEqualPair ( oneChildSpanAsString, htmlToString oneChildSpan )
+        , test "spans with one non-empty text node are decoded to just a span with text" <|
+            assertEqualPair ( oneChildSpanDecoded, nodeTypeFromHtml oneChildSpan )
+        , test "forms with two non-empty text children are just a form with text" <|
+            assertEqualPair ( twoChildFormAsString, htmlToString twoChildForm )
+        , test "forms with two non-empty text children are decoded to just a form with text" <|
+            assertEqualPair ( twoChildFormDecoded, nodeTypeFromHtml twoChildForm )
         ]
 
 
@@ -378,57 +377,57 @@ queryTests =
             Html.p [ Html.Attributes.class "foo bar moo" ] []
     in
         suite "Query tests"
-            [ test "query by tagname returns an empty list if no matches"
-                <| assertEqualPair ( [], queryByTagname "img" emptyDiv )
-            , test "query by tagname finds a node"
-                <| assertEqualPair
+            [ test "query by tagname returns an empty list if no matches" <|
+                assertEqualPair ( [], queryByTagname "img" emptyDiv )
+            , test "query by tagname finds a node" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml emptyDiv ]
                     , queryByTagname "div" emptyDiv
                     )
-            , test "query finds all nodes by tagname"
-                <| assertEqualPair
+            , test "query finds all nodes by tagname" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml emptyP
                       , nodeTypeFromHtml emptyP
                       ]
                     , queryByTagname "p" (Html.div [] [ emptyP, emptyP ])
                     )
-            , test "query by id returns an empty list if no matches"
-                <| assertEqualPair
+            , test "query by id returns an empty list if no matches" <|
+                assertEqualPair
                     ( []
                     , queryById "myId" (Html.div [] [ emptyP, emptyP ])
                     )
-            , test "query by id finds a node"
-                <| assertEqualPair
+            , test "query by id finds a node" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml p1 ]
                     , queryById "myP" (Html.div [] [ p1 ])
                     )
-            , test "query by classname returns an empty list if no matches"
-                <| assertEqualPair
+            , test "query by classname returns an empty list if no matches" <|
+                assertEqualPair
                     ( []
                     , queryByClassname "my-class" (Html.div [] [ emptyP, emptyP ])
                     )
-            , test "query by class finds a node"
-                <| assertEqualPair
+            , test "query by class finds a node" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml p1 ]
                     , queryByClassname "my-class" (Html.div [] [ p1, emptyP ])
                     )
-            , test "query by class finds all nodes"
-                <| assertEqualPair
+            , test "query by class finds all nodes" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml p1, nodeTypeFromHtml p2 ]
                     , queryByClassname "my-class" (Html.div [] [ p1, p2, p3 ])
                     )
-            , test "query by attribute finds all nodes"
-                <| assertEqualPair
+            , test "query by attribute finds all nodes" <|
+                assertEqualPair
                     ( [ emptyDivWithManyAttributesDecoded ]
                     , queryByAttribute "width" "50" (Html.div [] [ p1, emptyDivWithManyAttributes, p3 ])
                     )
-            , test "query by classlist returns an empty list if no matches"
-                <| assertEqualPair
+            , test "query by classlist returns an empty list if no matches" <|
+                assertEqualPair
                     ( []
                     , queryByClassList [ "foo", "nope" ] (Html.div [] [ p1, p2, p3 ])
                     )
-            , test "query by classlist finds all nodes"
-                <| assertEqualPair
+            , test "query by classlist finds all nodes" <|
+                assertEqualPair
                     ( [ nodeTypeFromHtml p3 ]
                     , queryByClassList [ "foo", "moo" ] (Html.div [] [ p1, p2, p3 ])
                     )

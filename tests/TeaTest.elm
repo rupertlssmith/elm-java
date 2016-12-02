@@ -1,8 +1,6 @@
 module TeaTest exposing (..)
 
-import ElmTest exposing (..)
 import Html
-import Html.App
 import Html.Attributes
 import Html.Events
 import HtmlQuery exposing (..)
