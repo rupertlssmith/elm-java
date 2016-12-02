@@ -15,7 +15,6 @@ import Json.Encode
 import Test exposing (..)
 import Expect exposing (Expectation)
 import Test.Runner as Runner
-import Random.Pcg
 import MarkdownTest
 import TeaTest
 
@@ -466,10 +465,7 @@ allTests =
 
 
 
--- seed =
---     Random.Pcg.initialSeed 227852860
---
---
+-- I think maybe not needed with the latest elm-test
 -- main : Program Never
 -- main =
---     Runner.run <| Runner.fromTest 1 seed allTests
+--     Runner.run <| Runner.fromTest 1 0 allTests
