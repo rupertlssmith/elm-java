@@ -1,5 +1,11 @@
 # elm-server-side-renderer
 
+## To run the tests
+
+Run elm-test in the root directory of the project:
+
+    elm-test
+
 ## Work in process!
 
 Take a `Html msg` element and turn it into a string.
