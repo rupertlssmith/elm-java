@@ -455,7 +455,7 @@ queryTests =
 
 allTests : Test
 allTests =
-    concat
+    describe "BasicTests"
         [ textTests
         , nodeTests
         , queryTests

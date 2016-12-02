@@ -83,7 +83,7 @@ fullBlockWithAttrsDecoded =
 
 nodeTests : Test
 nodeTests =
-    concat
+    describe "MarkdownTest"
         [ test "empty markdown are empty as a string" <|
             \_ ->
                 (assertEqualPair ( emptyBlockAsString, htmlToString emptyBlock ))

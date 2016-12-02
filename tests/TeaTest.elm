@@ -48,7 +48,7 @@ type SubSubMsg
 
 all : Test
 all =
-    concat
+    describe "TeaTest"
         [ test "should render the parent view" <|
             \_ ->
                 (Expect.equal 1 <|
