@@ -134,12 +134,12 @@ emptyDivWithAttributeDecoded =
 
 emptyDivWithManyAttributes : Html.Html msg
 emptyDivWithManyAttributes =
-    --Html.div
-    --    [ Html.Attributes.class "dog"
-    --    , Html.Attributes.value "cat"
-    --    , Html.Attributes.width 50
-    --    ]
-    --[]
+    -- Html.div
+    --     [ Html.Attributes.class "dog"
+    --     , Html.Attributes.value "cat"
+    --     , Html.Attributes.width 50
+    --     ]
+    --     []
     emptyDiv
         |> addAttribute (Html.Attributes.class "dog")
         |> addAttribute (Html.Attributes.value "cat")
@@ -149,7 +149,7 @@ emptyDivWithManyAttributes =
 emptyDivWithManyAttributesAsString : String
 emptyDivWithManyAttributesAsString =
     String.trim """
-<div class="dog" value="cat" width="50"></div>
+<div class="dog" value="cat"></div>
     """
 
 
@@ -165,8 +165,8 @@ emptyDivWithManyAttributesDecoded =
                     Dict.fromList
                         [ ( "className", "dog" )
                         , ( "value", "cat" )
-                        , ( "width", "50" )
                         ]
+                , attributes = Just (Json.Encode.object [ ( "width", Json.Encode.string "50" ) ])
             }
         }
 
