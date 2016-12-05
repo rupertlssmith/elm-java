@@ -24,9 +24,8 @@ init model =
 
 main : StaticProgram
 main =
-    Html.programWithFlags
-        { view = view
-        , init = init
+    Platform.programWithFlags
+        { init = init
         , subscriptions = \_ -> Sub.none
         , update = update
         }
