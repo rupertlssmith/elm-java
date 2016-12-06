@@ -1,4 +1,4 @@
-var _eeue56$elm_server_side_renderer$Native_ServerSideHelpers = function() {
+var _rupertlssmith$elm_server_side_renderer$Native_ServerSideHelpers = function() {
 
 var STYLE_KEY = 'STYLE';
 var EVENT_KEY = 'EVENT';
