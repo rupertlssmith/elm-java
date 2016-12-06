@@ -11,7 +11,7 @@ type alias Model =
 
 
 type Msg
-    = None
+    = JustOneMore Msg
 
 
 type alias StaticProgram =
