@@ -18,45 +18,22 @@ type alias StaticProgram =
     Platform.Program Value Model Msg
 
 
-message : msg -> Cmd msg
-message x =
-    Task.perform identity (Task.succeed x)
-
-
 main : StaticProgram
 main =
     Platform.programWithFlags
         { init = init
         , subscriptions = \_ -> Sub.none
-        , update = update
+        , update = \_ -> \model -> ( model, Cmd.none )
         }
 
 
 init : Value -> ( Model, Cmd Msg )
 init model =
-    let
-        d =
-            Debug.log "main" "test"
-    in
-        ( {}, Cmd.batch [ message None, result example ] )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update action model =
-    let
-        d =
-            Debug.log "main" action
-    in
-        ( model, Cmd.none )
+    ( {}, Cmd.batch [ result example ] )
 
 
 port result : String -> Cmd msg
 
 
 example =
-    htmlToString <| view {}
-
-
-view : Model -> Html Msg
-view model =
-    Html.div [] [ Html.text "hello world" ]
+    htmlToString <| Html.div [] [ Html.text "hello world" ]
