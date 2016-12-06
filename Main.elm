@@ -4,21 +4,10 @@ import HtmlToString exposing (htmlToString)
 import Html exposing (Html)
 import Json.Encode as Encode exposing (Value)
 import Task
+import ServerSide.Static exposing (HtmlProgram)
 
 
-type alias Model =
-    {}
-
-
-type Msg
-    = JustOneMore Msg
-
-
-type alias StaticProgram =
-    Platform.Program Value Model Msg
-
-
-main : StaticProgram
+main : HtmlProgram
 main =
     Platform.programWithFlags
         { init = init
@@ -27,9 +16,9 @@ main =
         }
 
 
-init : Value -> ( Model, Cmd Msg )
+init : Value -> ( Html Never, Cmd Never )
 init model =
-    ( {}, Cmd.batch [ result example ] )
+    ( html, Cmd.none )
 
 
 port result : String -> Cmd msg
