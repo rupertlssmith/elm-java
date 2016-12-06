@@ -35,5 +35,10 @@ init model =
 port result : String -> Cmd msg
 
 
+html : Html Never
+html =
+    Html.div [] [ Html.text "hello world" ]
+
+
 example =
-    htmlToString <| Html.div [] [ Html.text "hello world" ]
+    htmlToString <| html
