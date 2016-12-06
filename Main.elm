@@ -1,33 +1,22 @@
-port module Main exposing (example)
+port module Main exposing (..)
 
 import HtmlToString exposing (htmlToString)
 import Html exposing (Html)
 import Json.Encode as Encode exposing (Value)
 import Task
-import ServerSide.Static exposing (HtmlProgram)
+import ServerSide.Static exposing (..)
 
 
-main : HtmlProgram
+main : StringProgram
 main =
-    Platform.programWithFlags
-        { init = init
-        , subscriptions = \_ -> Sub.none
-        , update = \_ -> \model -> ( model, Cmd.none )
-        }
+    htmlToStringProgram { init = init }
 
 
-init : Value -> ( Html Never, Cmd Never )
+init : Value -> Html Never
 init model =
-    ( html, Cmd.none )
+    view
 
 
-port result : String -> Cmd msg
-
-
-html : Html Never
-html =
+view : Html Never
+view =
     Html.div [] [ Html.text "hello world" ]
-
-
-example =
-    htmlToString <| html
