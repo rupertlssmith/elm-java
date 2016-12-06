@@ -1,3 +1,4 @@
 var main = require('./main.js');
 
-var app = main.Main.worker({});
+var result = main.Main.program({});
+console.log("result = " + result);

@@ -18,4 +18,5 @@ function setTimeout(func, milliseconds) {
     return timer;
 }
 
-var app = Elm.Main.worker({});
+var result = Elm.Main.program({});
+console.log("result = " + result);

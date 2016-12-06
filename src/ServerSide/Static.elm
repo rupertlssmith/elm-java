@@ -3,6 +3,7 @@ module ServerSide.Static exposing (..)
 import Html exposing (Html)
 import Json.Encode exposing (Value)
 import HtmlToString exposing (htmlToString)
+import Native.ServerSidePrograms
 
 
 {-
@@ -36,9 +37,9 @@ htmlToStringProgram : { init : Value -> Html Never } -> StringProgram
 htmlToStringProgram program =
     let
         init_ input =
-            ( Debug.log "static" (htmlToString <| program.init input), Cmd.none )
+            Debug.log "static" (htmlToString <| program.init input)
     in
-        Platform.programWithFlags
+        Native.ServerSidePrograms.programWithFlags
             { init = init_
             , subscriptions = \_ -> Sub.none
             , update = \_ -> \model -> ( model, Cmd.none )
