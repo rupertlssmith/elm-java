@@ -15,16 +15,13 @@ module.exports = function(grunt) {
         'exec': {
             'elm-github-install': {
                 command: 'elm-github-install'
-            },
-            'closure': {
-                command: './closure-minify'
             }
         },
 
         'elm': {
             compile: {
                 files: {
-                    'app/editor_ui.js': ['src/elm/**/*.elm', 'src/auth-client/elm/**/*.elm']
+                    'app/elm-code.js': ['src/elm/**/*.elm']
                 }
             }
         },
@@ -41,20 +38,10 @@ module.exports = function(grunt) {
             },
             'sources': {
                 'src': [
-                    'src/js/**/*.js'
+                    'src/js/**/*.js',
+                    'app/elm-code.js'
                 ],
                 'dest': 'app/<%= pkg.name %>.js'
-            }
-        },
-
-        'uglify': {
-            'options': {
-                'mangle': false
-            },
-            'dist': {
-                'files': {
-                    'app/<%= pkg.name %>.min.js': ['app/<%= pkg.name %>.annotated.js']
-                }
             }
         },
 
@@ -96,6 +83,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('dev', ['watch:dev']);
     grunt.registerTask('minified', ['watch:min']);
-    grunt.registerTask('build', ['copy', 'exec:elm-github-install', 'elm']);
-    grunt.registerTask('package', ['build', 'exec:closure', 'uglify', 'compress']);
+    grunt.registerTask('build', ['copy', 'exec:elm-github-install', 'elm', 'concat']);
+    grunt.registerTask('package', ['build', 'compress']);
 };
