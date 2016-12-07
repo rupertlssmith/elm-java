@@ -1,6 +1,8 @@
-elm-stuff
-tests.js
+target
 *.iml
-/.idea
-main.js
-index.html
+*.iws
+*.ipr
+dependency-reduced-pom.xml
+code-coverage
+.idea
+

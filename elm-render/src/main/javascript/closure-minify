@@ -1,0 +1,3 @@
+#!/bin/sh
+
+java -jar closure-compiler.jar -O ADVANCED --assume_function_wrapper --js app/editor_ui.js > editor_ui.js && cp editor_ui.js app/

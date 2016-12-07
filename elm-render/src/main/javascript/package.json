@@ -1,0 +1,39 @@
+{
+    "version": "1.0.0-SNAPSHOT",
+    "name": "editor_ui",
+    "description": "UI for authentication server.",
+    "devDependencies": {
+        "karma": "^0.12.16",
+        "karma-chrome-launcher": "^0.1.4",
+        "karma-jasmine": "^0.1.5",
+        "protractor": "~1.0.0",
+        "http-server": "^0.6.1",
+        "tmp": "0.0.23",
+        "bower": "^1.3.1",
+        "shelljs": "^0.2.6",
+        "express": "^4.7.2",
+        "grunt": "~0.4.5",
+        "grunt-cli": "~0.1.13",
+        "grunt-html2js": "~0.2.7",
+        "grunt-contrib-uglify": "~0.5.0",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-copy": "~0.8.2",
+        "grunt-contrib-connect": "~0.8.0",
+        "grunt-contrib-compress": "~0.9.1",
+        "grunt-contrib-concat": "~0.4.0",
+        "grunt-contrib-jshint": "~0.10.0",
+        "grunt-contrib-watch": "~0.6.1",
+        "grunt-bower-task": "~0.3.4",
+        "grunt-responsive-images": "~0.1.7",
+        "grunt-contrib-compass": "~1.0.4",
+        "grunt-ng-annotate": "~2.0.2",
+        "grunt-angular-templates": "~1.0.3",
+        "grunt-elm": "~1.4.0",
+        "grunt-exec": "~0.4.6"
+    },
+    "scripts": {
+        "postinstall": "bower install",
+        "prestart": "npm install",
+        "start": "node server.js"
+    }
+}
