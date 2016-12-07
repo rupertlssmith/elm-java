@@ -1,7 +1,7 @@
 {
     "version": "1.0.0-SNAPSHOT",
-    "name": "editor_ui",
-    "description": "UI for authentication server.",
+    "name": "elm-render",
+    "description": "Static rendering with Elm under Java.",
     "devDependencies": {
         "karma": "^0.12.16",
         "karma-chrome-launcher": "^0.1.4",
@@ -32,8 +32,6 @@
         "grunt-exec": "~0.4.6"
     },
     "scripts": {
-        "postinstall": "bower install",
-        "prestart": "npm install",
-        "start": "node server.js"
+        "prestart": "npm install"
     }
 }
