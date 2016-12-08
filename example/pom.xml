@@ -63,9 +63,11 @@
                     <workingDirectory>src/main/elm</workingDirectory>
                     <nodeVersion>v0.10.29</nodeVersion>
                     <npmVersion>1.4.21</npmVersion>
+                    <elmVersion>0.18.0</elmVersion>
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
+                    <!--
                     <execution>
                         <id>install node and npm</id>
                         <goals>
@@ -73,7 +75,15 @@
                         </goals>
                         <phase>generate-resources</phase>
                     </execution>
+                    -->
                     <!-- install elm-make and any other elm tools needed -->
+                    <execution>
+                        <id>install elm</id>
+                        <goals>
+                            <goal>install-elm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
                     <!-- run elm-make -output artifactName-version.js -->
                     <!--
                     <execution>
