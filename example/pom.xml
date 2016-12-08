@@ -60,10 +60,11 @@
                 <artifactId>elm-java-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
                 <configuration>
-                    <workingDirectory>src/main/elm</workingDirectory>
                     <nodeVersion>v0.10.29</nodeVersion>
                     <npmVersion>1.4.21</npmVersion>
                     <elmVersion>0.18.0</elmVersion>
+                    <elmGithubInstallVersion>0.2.0</elmGithubInstallVersion>
+                    <workingDirectory>target</workingDirectory>
                     <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>

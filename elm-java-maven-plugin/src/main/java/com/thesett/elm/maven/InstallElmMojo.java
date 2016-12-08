@@ -15,11 +15,14 @@
  */
 package com.thesett.elm.maven;
 
+import java.util.Collections;
+
 import com.github.eirslett.maven.plugins.frontend.lib.FrontendPluginFactory;
 import com.github.eirslett.maven.plugins.frontend.lib.InstallationException;
 import com.github.eirslett.maven.plugins.frontend.lib.NPMInstaller;
 import com.github.eirslett.maven.plugins.frontend.lib.NodeInstaller;
 import com.github.eirslett.maven.plugins.frontend.lib.ProxyConfig;
+import com.github.eirslett.maven.plugins.frontend.lib.TaskRunnerException;
 import com.github.eirslett.maven.plugins.frontend.mojo.AbstractFrontendMojo;
 
 import org.apache.maven.execution.MavenSession;
@@ -29,6 +32,7 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.settings.Server;
 import org.apache.maven.settings.crypto.SettingsDecrypter;
+import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
  * InstallElmMojo builds on the frontend-maven-plugin to add support for installing elm build tools.
@@ -44,9 +48,15 @@ import org.apache.maven.settings.crypto.SettingsDecrypter;
 @Mojo(name = "install-elm", defaultPhase = LifecyclePhase.GENERATE_RESOURCES, threadSafe = true)
 public class InstallElmMojo extends AbstractFrontendMojo
 {
+    private static final String NPM_REGISTRY_URL = "npmRegistryURL";
+
     /** The version of Elm to install. */
     @Parameter(property = "elmVersion", required = true)
     private String elmVersion;
+
+    /** The version of Elm to install. */
+    @Parameter(property = "elmGithubInstallVersion", required = true)
+    private String elmGithubInstallVersion;
 
     /** Where to download Node.js binary from. Defaults to http://nodejs.org/dist/ */
     @Parameter(
@@ -89,17 +99,28 @@ public class InstallElmMojo extends AbstractFrontendMojo
     @Parameter(property = "skip.installnodenpm", defaultValue = "false")
     private Boolean skip;
 
+    @Component
+    private BuildContext buildContext;
+
     @Component(role = SettingsDecrypter.class)
     private SettingsDecrypter decrypter;
 
+    @Parameter(property = "frontend.npm.npmInheritsProxyConfigFromMaven", required = false, defaultValue = "true")
+    private boolean npmInheritsProxyConfigFromMaven;
+
+    /** Registry override, passed as the registry option during npm install if set. */
+    @Parameter(property = NPM_REGISTRY_URL, required = false, defaultValue = "")
+    private String npmRegistryURL;
+
     @Override
-    public void execute(FrontendPluginFactory factory) throws InstallationException
+    public void execute(FrontendPluginFactory factory) throws InstallationException, TaskRunnerException
     {
         ProxyConfig proxyConfig = MojoUtils.getProxyConfig(session, decrypter);
         String nodeDownloadRoot = getNodeDownloadRoot();
         String npmDownloadRoot = getNpmDownloadRoot();
         Server server = MojoUtils.decryptServer(serverId, session, decrypter);
 
+        // Download and install node and npm.
         if (null != server)
         {
             factory.getNodeInstaller(proxyConfig)
@@ -130,6 +151,22 @@ public class InstallElmMojo extends AbstractFrontendMojo
                 .setNpmDownloadRoot(npmDownloadRoot)
                 .install();
         }
+
+        // Use npm to install elm and elm-github-install
+        //File packageJson = new File(workingDirectory, "package.json");
+
+        if ((buildContext == null) /*|| buildContext.hasDelta(packageJson)*/ || !buildContext.isIncremental())
+        {
+            proxyConfig = getNPMProxyConfig();
+            factory.getNpmRunner(proxyConfig, getRegistryUrl())
+                .execute("install elm@" + elmVersion, environmentVariables);
+            factory.getNpmRunner(proxyConfig, getRegistryUrl())
+                .execute("install elm-github-install@" + elmGithubInstallVersion, environmentVariables);
+        }
+        else
+        {
+            getLog().info("Skipping npm install as package.json unchanged");
+        }
     }
 
     @Override
@@ -158,5 +195,25 @@ public class InstallElmMojo extends AbstractFrontendMojo
         }
 
         return npmDownloadRoot;
+    }
+
+    private ProxyConfig getNPMProxyConfig()
+    {
+        if (npmInheritsProxyConfigFromMaven)
+        {
+            return MojoUtils.getProxyConfig(session, decrypter);
+        }
+        else
+        {
+            getLog().info("npm not inheriting proxy config from Maven");
+
+            return new ProxyConfig(Collections.<ProxyConfig.Proxy>emptyList());
+        }
+    }
+
+    private String getRegistryUrl()
+    {
+        // check to see if overridden via `-D`, otherwise fallback to pom value
+        return System.getProperty(NPM_REGISTRY_URL, npmRegistryURL);
     }
 }
