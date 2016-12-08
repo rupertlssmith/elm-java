@@ -12,8 +12,8 @@
     <artifactId>elm-java-maven-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-
-    <packaging>jar</packaging>
+    
+    <packaging>maven-plugin</packaging>
 
     <properties>
         <topdir>${basedir}/..</topdir>
