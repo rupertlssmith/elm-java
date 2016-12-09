@@ -83,6 +83,7 @@
                         <id>build elm</id>
                         <configuration>
                             <srcdir>src/main/elm</srcdir>
+                            <srcSpec>src/Main.elm</srcSpec>
                         </configuration>
                         <goals>
                             <goal>elm</goal>

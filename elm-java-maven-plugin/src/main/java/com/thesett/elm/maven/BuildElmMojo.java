@@ -57,6 +57,11 @@ public class BuildElmMojo extends AbstractFrontendMojo {
     @Parameter(property = "srcdir", required = true)
     private File srcdir;
 
+    /** String specifying which elm sources to build.
+     * TODO: process wildcard specs. */
+    @Parameter(property = "srcSpec", required = true)
+    private String srcSpec;
+
     /** Skips execution of this mojo. */
     @Parameter(property = "skip.elm", defaultValue = "false")
     private Boolean skip;
@@ -94,7 +99,7 @@ public class BuildElmMojo extends AbstractFrontendMojo {
             ElmMakeRunner elmMakeRunner = new ElmMakeRunner(executorConfig);
 
             elmGithubInstallRunner.execute("", environmentVariables);
-            elmMakeRunner.execute("--output main.js", environmentVariables);
+            elmMakeRunner.execute(srcSpec + " --output main.js", environmentVariables);
 
             if (outputdir != null) {
                 getLog().info("Refreshing files after elm-make: " + outputdir);
