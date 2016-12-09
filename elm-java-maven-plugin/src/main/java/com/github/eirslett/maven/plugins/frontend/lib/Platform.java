@@ -44,7 +44,7 @@ enum OS { Windows, Mac, Linux, SunOS;
     }
 }
 
-class Platform {
+public class Platform {
     private final OS os;
     private final Architecture architecture;
 

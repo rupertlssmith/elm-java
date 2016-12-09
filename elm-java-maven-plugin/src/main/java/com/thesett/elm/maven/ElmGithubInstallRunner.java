@@ -30,7 +30,7 @@ import com.github.eirslett.maven.plugins.frontend.lib.NodeTaskExecutor;
  */
 public class ElmGithubInstallRunner extends NodeTaskExecutor
 {
-    private static final String TASK_LOCATION = "node_modules/elm-github-install/bin/index.js";
+    private static final String TASK_LOCATION = "../node_modules/elm-github-install/bin/index.js";
 
     ElmGithubInstallRunner(NodeExecutorConfig config)
     {

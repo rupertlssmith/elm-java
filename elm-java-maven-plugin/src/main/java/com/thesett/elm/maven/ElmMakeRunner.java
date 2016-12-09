@@ -30,7 +30,7 @@ import com.github.eirslett.maven.plugins.frontend.lib.NodeTaskExecutor;
  */
 public class ElmMakeRunner extends NodeTaskExecutor
 {
-    private static final String TASK_LOCATION = "node_modules/elm/binwrappers/elm-make";
+    private static final String TASK_LOCATION = "../node_modules/elm/binwrappers/elm-make";
 
     ElmMakeRunner(NodeExecutorConfig config)
     {
