@@ -86,6 +86,13 @@
                         <phase>generate-resources</phase>
                     </execution>
                     <!-- run elm-make -output artifactName-version.js -->
+                    <execution>
+                        <id>build elm</id>
+                        <goals>
+                            <goal>elm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>                    
                     <!--
                     <execution>
                         <id>npm install</id>
