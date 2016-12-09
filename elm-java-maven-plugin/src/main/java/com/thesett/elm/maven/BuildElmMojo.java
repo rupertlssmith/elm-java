@@ -29,6 +29,7 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
@@ -99,7 +100,10 @@ public class BuildElmMojo extends AbstractFrontendMojo {
             ElmMakeRunner elmMakeRunner = new ElmMakeRunner(executorConfig);
 
             elmGithubInstallRunner.execute("", environmentVariables);
-            elmMakeRunner.execute(srcSpec + " --output main.js", environmentVariables);
+
+            String artifact = project.getArtifactId();
+
+            elmMakeRunner.execute(srcSpec + " --output ../" + artifact + ".js", environmentVariables);
 
             if (outputdir != null) {
                 getLog().info("Refreshing files after elm-make: " + outputdir);

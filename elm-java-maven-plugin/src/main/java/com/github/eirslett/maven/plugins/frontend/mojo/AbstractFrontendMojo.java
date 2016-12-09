@@ -49,7 +49,7 @@ public abstract class AbstractFrontendMojo extends AbstractMojo {
       defaultValue = "${project}",
       readonly = true
   )
-  private MavenProject project;
+  protected MavenProject project;
 
   @Parameter(
       defaultValue = "${repositorySystemSession}",
