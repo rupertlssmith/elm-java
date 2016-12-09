@@ -64,8 +64,10 @@
                     <npmVersion>1.4.21</npmVersion>
                     <elmVersion>0.18.0</elmVersion>
                     <elmGithubInstallVersion>0.2.0</elmGithubInstallVersion>
+                    <!-- These should be defaults. -->
                     <workingDirectory>target</workingDirectory>
                     <installDirectory>target</installDirectory>
+                    <!-- Elm config. -->                    
                 </configuration>
                 <executions>
                     <!-- install elm-make and any other elm tools needed -->
@@ -79,6 +81,9 @@
                     <!-- run elm-make -output artifactName-version.js -->
                     <execution>
                         <id>build elm</id>
+                        <configuration>
+                            <srcdir>src/main/elm</srcdir>
+                        </configuration>
                         <goals>
                             <goal>elm</goal>
                         </goals>

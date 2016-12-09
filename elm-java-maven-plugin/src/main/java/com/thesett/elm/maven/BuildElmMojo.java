@@ -16,12 +16,14 @@
 package com.thesett.elm.maven;
 
 import java.io.File;
+import java.io.IOException;
 
+import com.github.eirslett.maven.plugins.frontend.lib.FrontendException;
 import com.github.eirslett.maven.plugins.frontend.lib.FrontendPluginFactory;
 import com.github.eirslett.maven.plugins.frontend.lib.NodeExecutorConfig;
-import com.github.eirslett.maven.plugins.frontend.lib.TaskRunnerException;
 import com.github.eirslett.maven.plugins.frontend.mojo.AbstractFrontendMojo;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
@@ -36,9 +38,13 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  *
  * @author Rupert Smith
  */
-@Mojo(name="elm", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
+@Mojo(name = "elm", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
 public class BuildElmMojo extends AbstractFrontendMojo
 {
+    /** The directory containing Elm files and elm-package.json. */
+    @Parameter(property = "srcdir", required = true)
+    private File srcdir;
+
     /**
      * The directory where front end files will be output by elm-make. If this is set then they will be refreshed so
      * they correctly show as modified.
@@ -54,10 +60,21 @@ public class BuildElmMojo extends AbstractFrontendMojo
     private BuildContext buildContext;
 
     /** {@inheritDoc} */
-    public void execute(FrontendPluginFactory factory) throws TaskRunnerException
+    public void execute(FrontendPluginFactory factory) throws FrontendException
     {
         if (shouldExecute())
         {
+            // Copy sources from the source dir to the working dir.
+            try
+            {
+                FileUtils.copyDirectory(srcdir, workingDirectory);
+            }
+            catch (IOException e)
+            {
+                throw new FrontendException(e.getMessage(), e);
+            }
+
+            // Install dependencies and make it.
             NodeExecutorConfig executorConfig = factory.getExecutorConfig();
             ElmGithubInstallRunner elmGithubInstallRunner = new ElmGithubInstallRunner(executorConfig);
             ElmMakeRunner elmMakeRunner = new ElmMakeRunner(executorConfig);

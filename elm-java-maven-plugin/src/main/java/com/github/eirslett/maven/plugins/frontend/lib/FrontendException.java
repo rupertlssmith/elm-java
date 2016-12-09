@@ -6,7 +6,7 @@ public class FrontendException extends Exception {
     super(message);
   }
 
-  FrontendException(String message, Throwable cause){
+  public FrontendException(String message, Throwable cause){
     super(message, cause);
   }
 }
