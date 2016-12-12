@@ -35,15 +35,28 @@ import io.dropwizard.views.ViewRenderer;
  */
 public class ElmViewRenderer implements ViewRenderer
 {
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     *
+     * <p/>A view is renderable iff it is an {@link ElmView}.
+     */
     public boolean isRenderable(View view)
     {
-        return true;
+        return (view instanceof ElmView);
     }
 
     /** {@inheritDoc} */
     public void render(View view, Locale locale, OutputStream outputStream) throws IOException
     {
+        // Get the name of the Module.
+
+        // Initialize javascript environment.
+        // Load the Nashorn bootstrap code.
+        // Load the compiled Elm .js code.
+
+        // Create the javascript command to run the static program.
+
+        // Render the view.
     }
 
     /** {@inheritDoc} */
