@@ -15,10 +15,17 @@
  */
 package com.thesett.elm;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.List;
+
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+
+import com.thesett.util.collections.CollectionUtil;
+import com.thesett.util.resource.ResourceUtils;
 
 /**
  * ElmRenderer sets up a Nashorn javascript environment with compiled Elm code. Static Elm programs within this code can
@@ -37,29 +44,56 @@ public class ElmRenderer
     /** The name of the helper function to call the static program with. */
     public static final String PROGRAM_FUNCTION = "staticElmProgram";
 
+    /** The name of the javascript file to load the boot wrapper from. */
+    public static final String BOOT_JS_FILENAME = "bootnashorn.js";
+
     /** Holds a reference to the Nashorn lifecycle manager. */
     private ScriptEngineManager nashornLifecycle;
 
     /** Holds a reference to the Nashorn execution engine. */
     private ScriptEngine engine;
 
-    public ElmRenderer()
+    /** Holds a path to the boot wrapper javascript. */
+    private String bootResourcePath;
+
+    /** Holds a path to the compiled Elm javascript. */
+    private final String elmJsResourcePath;
+
+    public ElmRenderer(String elmJsResourcePath)
     {
         nashornLifecycle = new ScriptEngineManager();
+        this.elmJsResourcePath = elmJsResourcePath;
     }
 
     /**
      * Initializes the Nashorn javascript engine, ready to run the Elm static program, by loading the bootstrap code and
      * the compiled Elm code.
      *
-     * @throws ScriptException If the compiled Elm code fails to evaluate.
+     * @throws FileNotFoundException If the compiled Elm code cannot be loaded from the resource path specified in the
+     *                               constructor.
+     * @throws ScriptException       If the compiled Elm code fails to evaluate.
      */
-    public void init() throws ScriptException
+    public void init() throws ScriptException, FileNotFoundException
     {
         // Load the Nashorn bootstrap code and the compiled Elm .js code.
         engine = nashornLifecycle.getEngineByName("nashorn");
-        engine.eval("load (\"bootnashorn.js\");");
-        engine.eval("load (\"main.js\");");
+
+        List<String> resources = ResourceUtils.getResources(BOOT_JS_FILENAME, "");
+        this.bootResourcePath = ResourceUtils.resourceFilePath(CollectionUtil.first(resources));
+
+        try
+        {
+            engine.eval(new FileReader(bootResourcePath));
+        }
+        catch (FileNotFoundException e)
+        {
+            // Should not happen as the boot script is provided in a known location. Promoting to a bug.
+            throw new IllegalStateException("The Elm Nashorn boot script should load from a known location.", e);
+
+        }
+
+        engine.eval(new FileReader(elmJsResourcePath));
+
     }
 
     /**
