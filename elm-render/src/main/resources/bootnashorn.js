@@ -9,5 +9,12 @@ console.debug = print;
 console.warn = print;
 console.log = print;
 
-var result = Elm.Main.program({});
-console.log("result = " + result);
+function staticElmProgram(moduleName, inputModel) {
+    var result = Elm[moduleName].program(inputModel);
+
+    console.log("result = " + result);
+
+    return result;
+}
+
+
