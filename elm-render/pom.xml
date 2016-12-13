@@ -32,14 +32,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <targetPath>webapp/app</targetPath>
-                <filtering>false</filtering>
-                <directory>src/main/webapp/app</directory>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

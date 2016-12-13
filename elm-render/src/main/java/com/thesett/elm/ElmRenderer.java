@@ -47,6 +47,9 @@ public class ElmRenderer
     /** The name of the javascript file to load the boot wrapper from. */
     public static final String BOOT_JS_FILENAME = "bootnashorn.js";
 
+    /** The package path of the boot wrapper. */
+    public static final String BOOT_JS_PACKAGE = "";
+
     /** Holds a reference to the Nashorn lifecycle manager. */
     private ScriptEngineManager nashornLifecycle;
 
@@ -59,41 +62,12 @@ public class ElmRenderer
     /** Holds a path to the compiled Elm javascript. */
     private final String elmJsResourcePath;
 
-    public ElmRenderer(String elmJsResourcePath)
+    public ElmRenderer(String elmJsResourcePath) throws ScriptException, FileNotFoundException
     {
         nashornLifecycle = new ScriptEngineManager();
         this.elmJsResourcePath = elmJsResourcePath;
-    }
 
-    /**
-     * Initializes the Nashorn javascript engine, ready to run the Elm static program, by loading the bootstrap code and
-     * the compiled Elm code.
-     *
-     * @throws FileNotFoundException If the compiled Elm code cannot be loaded from the resource path specified in the
-     *                               constructor.
-     * @throws ScriptException       If the compiled Elm code fails to evaluate.
-     */
-    public void init() throws ScriptException, FileNotFoundException
-    {
-        // Load the Nashorn bootstrap code and the compiled Elm .js code.
-        engine = nashornLifecycle.getEngineByName("nashorn");
-
-        List<String> resources = ResourceUtils.getResources(BOOT_JS_FILENAME, "");
-        this.bootResourcePath = ResourceUtils.resourceFilePath(CollectionUtil.first(resources));
-
-        try
-        {
-            engine.eval(new FileReader(bootResourcePath));
-        }
-        catch (FileNotFoundException e)
-        {
-            // Should not happen as the boot script is provided in a known location. Promoting to a bug.
-            throw new IllegalStateException("The Elm Nashorn boot script should load from a known location.", e);
-
-        }
-
-        engine.eval(new FileReader(elmJsResourcePath));
-
+        init();
     }
 
     /**
@@ -125,5 +99,43 @@ public class ElmRenderer
         }
 
         return result;
+    }
+
+    /**
+     * Initializes the Nashorn javascript engine, ready to run the Elm static program, by loading the bootstrap code and
+     * the compiled Elm code.
+     *
+     * @throws FileNotFoundException If the compiled Elm code cannot be loaded from the resource path specified in the
+     *                               constructor.
+     * @throws ScriptException       If the compiled Elm code fails to evaluate.
+     */
+    private void init() throws ScriptException, FileNotFoundException
+    {
+        // Load the Nashorn bootstrap code and the compiled Elm .js code.
+        engine = nashornLifecycle.getEngineByName("nashorn");
+
+        List<String> resources = ResourceUtils.getResources(BOOT_JS_FILENAME, BOOT_JS_PACKAGE);
+
+        if ((resources == null) || resources.isEmpty())
+        {
+            throw new IllegalStateException("Failed to find " + BOOT_JS_PACKAGE + " " + BOOT_JS_FILENAME +
+                " on the classpath.");
+        }
+
+        bootResourcePath = ResourceUtils.resourceFilePath(CollectionUtil.first(resources));
+
+        try
+        {
+            engine.eval(new FileReader(bootResourcePath));
+        }
+        catch (FileNotFoundException e)
+        {
+            // Should not happen as the boot script is provided in a known location. Promoting to a bug.
+            throw new IllegalStateException("The Elm Nashorn boot script should load from a known location.", e);
+
+        }
+
+        engine.eval(new FileReader(elmJsResourcePath));
+
     }
 }
