@@ -15,23 +15,44 @@
  */
 package com.thesett.util.views.elm;
 
+import java.util.List;
+import java.util.Map;
+
 /**
- * ElmBundleConfig defines the config that application configs need to implement in order to supply configuration for
- * the Elm bundle.
+ * ElmBundleConfig provides all of the configuration needed to set up the Elm bundle.
  *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td> Defines the application configuration for Elm. </td></tr>
+ * <tr><td> Provide the Elm bundle configuration.
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public interface ElmBundleConfig
+public class ElmBundleConfig
 {
-    /**
-     * Provides the Elm bundle configuration.
-     *
-     * @return The Elm bundle configuration.
-     */
-    ElmConfig getElm();
+    /** Indicates whether the compiled Elm static program should be cached, or re-loaded each time. */
+    private boolean cacheTemplates = true;
+
+    /** Optionally provides overrides from Elm module names to files containing the compiled Elm code fro the module. */
+    private List<Map<String, String>> overrides;
+
+    public boolean isCacheTemplates()
+    {
+        return cacheTemplates;
+    }
+
+    public void setCacheTemplates(boolean cacheTemplates)
+    {
+        this.cacheTemplates = cacheTemplates;
+    }
+
+    public List<Map<String, String>> getOverrides()
+    {
+        return overrides;
+    }
+
+    public void setOverrides(List<Map<String, String>> overrides)
+    {
+        this.overrides = overrides;
+    }
 }
