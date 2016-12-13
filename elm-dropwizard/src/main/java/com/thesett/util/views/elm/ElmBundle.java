@@ -15,6 +15,7 @@
  */
 package com.thesett.util.views.elm;
 
+import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -27,7 +28,7 @@ import io.dropwizard.setup.Environment;
  *
  * @author Rupert Smith
  */
-public abstract class ElmBundle implements ConfiguredBundle<ElmBundleConfig>
+public abstract class ElmBundle<T extends Configuration> implements ConfiguredBundle<T>
 {
     /** {@inheritDoc} */
     public void initialize(Bootstrap<?> bootstrap)
@@ -36,7 +37,16 @@ public abstract class ElmBundle implements ConfiguredBundle<ElmBundleConfig>
     }
 
     /** {@inheritDoc} */
-    public void run(ElmBundleConfig elmBundleConfig, Environment environment) throws Exception
+    public void run(T config, Environment environment) throws Exception
     {
     }
+
+    /**
+     * Override this to extract the elm bundle config from your application config.
+     *
+     * @param  config The application configuration.
+     *
+     * @return The Elm bundle configuration.
+     */
+    protected abstract ElmBundleConfig getElmBundleConfig(T config);
 }
