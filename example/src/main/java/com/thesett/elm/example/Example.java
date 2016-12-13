@@ -6,12 +6,14 @@ import java.io.FileNotFoundException;
 import javax.script.ScriptException;
 
 import com.thesett.elm.ElmRenderer;
+import com.thesett.util.resource.ResourceUtils;
 
 public class Example
 {
     public static void main(String[] args) throws ScriptException, FileNotFoundException
     {
-        ElmRenderer elmRenderer = new ElmRenderer("example.js");
+        String examplePath = ResourceUtils.resourceFilePath("example.js");
+        ElmRenderer elmRenderer = new ElmRenderer(examplePath);
 
         String result = (String) elmRenderer.runModule("Main", new Object());
 

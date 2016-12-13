@@ -29,7 +29,6 @@ import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.project.MavenProject;
 import org.sonatype.plexus.build.incremental.BuildContext;
 
 /**
@@ -41,25 +40,18 @@ import org.sonatype.plexus.build.incremental.BuildContext;
  * @author Rupert Smith
  */
 @Mojo(name = "elm", defaultPhase = LifecyclePhase.GENERATE_RESOURCES)
-public class BuildElmMojo extends AbstractFrontendMojo {
+public class BuildElmMojo extends AbstractFrontendMojo
+{
     /**
      * The name of the subdirectory to do all elm build work in. This is directly beneath under the working directory.
      */
     private static final String ELM_DIR = "elm";
 
-    /**
-    * The directory where front end files will be output by elm-make. If this is set then they will be refreshed so
-    * they correctly show as modified.
-    */
-    @Parameter(property = "outputdir")
-    private File outputdir;
-
     /** The directory containing Elm files and elm-package.json. */
     @Parameter(property = "srcdir", required = true)
     private File srcdir;
 
-    /** String specifying which elm sources to build.
-     * TODO: process wildcard specs. */
+    /** String specifying which elm sources to build. TODO: process wildcard specs. */
     @Parameter(property = "srcSpec", required = true)
     private String srcSpec;
 
@@ -71,8 +63,10 @@ public class BuildElmMojo extends AbstractFrontendMojo {
     private BuildContext buildContext;
 
     /** {@inheritDoc} */
-    public void execute(FrontendPluginFactory factory) throws FrontendException {
-        if (shouldExecute()) {
+    public void execute(FrontendPluginFactory factory) throws FrontendException
+    {
+        if (shouldExecute())
+        {
             NodeExecutorConfig executorConfig = factory.getExecutorConfig();
             File workingDirectory = executorConfig.getWorkingDirectory();
 
@@ -80,18 +74,24 @@ public class BuildElmMojo extends AbstractFrontendMojo {
             String elmWorkingPath = workingDirectory.getPath() + "/" + ELM_DIR;
             File elmWorkingDir = null;
 
-            try {
+            try
+            {
                 elmWorkingDir = createDirIfNotExists(workingDirectory, elmWorkingPath);
-            }catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 throw new FrontendException(e.getMessage(), e);
             }
 
             executorConfig = new WrappedExecutorConfig(executorConfig, elmWorkingDir);
 
             // Copy sources from the source dir to the working dir.
-            try {
+            try
+            {
                 FileUtils.copyDirectory(srcdir, elmWorkingDir);
-            }catch (IOException e) {
+            }
+            catch (IOException e)
+            {
                 throw new FrontendException(e.getMessage(), e);
             }
 
@@ -103,55 +103,63 @@ public class BuildElmMojo extends AbstractFrontendMojo {
 
             String artifact = project.getArtifactId();
 
-            elmMakeRunner.execute(srcSpec + " --output ../" + artifact + ".js", environmentVariables);
+            String outputDirName = project.getBuild().getOutputDirectory();
+            String outputFile = outputDirName  + "/" + artifact + ".js";
 
-            if (outputdir != null) {
-                getLog().info("Refreshing files after elm-make: " + outputdir);
-                buildContext.refresh(outputdir);
-            }
+            elmMakeRunner.execute(srcSpec + " --output " + outputFile, environmentVariables);
         }
     }
 
-    protected boolean skipExecution() {
+    protected boolean skipExecution()
+    {
         return this.skip;
     }
 
-    private boolean shouldExecute() {
+    private boolean shouldExecute()
+    {
         return true;
     }
 
-    private File createDirIfNotExists(File parentDir, String directoryName) throws IOException {
+    private File createDirIfNotExists(File parentDir, String directoryName) throws IOException
+    {
         File directory = new File(String.valueOf(directoryName));
 
-        if (!directory.exists()) {
+        if (!directory.exists())
+        {
             directory.mkdir();
         }
 
         return directory;
     }
 
-    private class WrappedExecutorConfig implements NodeExecutorConfig {
+    private class WrappedExecutorConfig implements NodeExecutorConfig
+    {
         private final NodeExecutorConfig nodeExecutorConfig;
         private final File workingDirectory;
 
-        public WrappedExecutorConfig(NodeExecutorConfig nodeExecutorConfig, File workingDirectory) {
+        public WrappedExecutorConfig(NodeExecutorConfig nodeExecutorConfig, File workingDirectory)
+        {
             this.nodeExecutorConfig = nodeExecutorConfig;
             this.workingDirectory = workingDirectory;
         }
 
-        public File getNodePath() {
+        public File getNodePath()
+        {
             return nodeExecutorConfig.getNodePath();
         }
 
-        public File getNpmPath() {
+        public File getNpmPath()
+        {
             return nodeExecutorConfig.getNpmPath();
         }
 
-        public File getWorkingDirectory() {
+        public File getWorkingDirectory()
+        {
             return workingDirectory;
         }
 
-        public Platform getPlatform() {
+        public Platform getPlatform()
+        {
             return nodeExecutorConfig.getPlatform();
         }
     }
