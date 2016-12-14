@@ -15,17 +15,32 @@
  */
 package com.thesett.util.views.elm;
 
+import java.io.FileNotFoundException;
+
+import javax.script.ScriptException;
+
+import com.thesett.elm.ElmRenderer;
+
 /**
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
  * <tr><th> Responsibilities <th> Collaborations
- * <tr><td>
+ * <tr><td> Load and provide access to an Elm renderer. </td></tr>
  * </table></pre>
  *
  * @author Rupert Smith
  */
 public class FileElmModuleLoader implements ElmModuleLoader
 {
-    public FileElmModuleLoader(String s)
+    private final String filePath;
+
+    public FileElmModuleLoader(String filePath)
     {
+        this.filePath = filePath;
+    }
+
+    /** {@inheritDoc} */
+    public ElmRenderer loadRenderer() throws ScriptException, FileNotFoundException
+    {
+        return new ElmRenderer(filePath);
     }
 }

@@ -15,10 +15,19 @@
  */
 package com.thesett.util.views.elm;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.script.ScriptException;
+
+import com.google.common.base.Charsets;
+import com.thesett.elm.ElmRenderer;
 
 import io.dropwizard.views.View;
 import io.dropwizard.views.ViewRenderer;
@@ -35,8 +44,14 @@ import io.dropwizard.views.ViewRenderer;
  */
 public class ElmViewRenderer implements ViewRenderer
 {
+    /** Holds a mapping from module names to loaders for their renderers. */
     public static Map<String, ElmModuleLoader> moduleLoaders;
+
+    /** Indicates whether or not the renderer cache should be used. */
     public static boolean useCache;
+
+    /** Holds a cache of renderers for Elm modules. */
+    private final Map<String, ElmRenderer> moduleRenderers = new ConcurrentHashMap<>();
 
     /**
      * {@inheritDoc}
@@ -51,15 +66,56 @@ public class ElmViewRenderer implements ViewRenderer
     /** {@inheritDoc} */
     public void render(View view, Locale locale, OutputStream outputStream) throws IOException
     {
+        ElmView elmView = (ElmView) view;
+
         // Get the name of the Module.
+        String moduleName = elmView.getTemplateName();
 
-        // Initialize javascript environment.
-        // Load the Nashorn bootstrap code.
-        // Load the compiled Elm .js code.
+        ElmRenderer renderer = null;
 
-        // Create the javascript command to run the static program.
+        // If caching is enabled, try and fetch the renderer from the cache.
+        if (useCache)
+        {
+            renderer = moduleRenderers.get(moduleName);
+        }
+
+        // If no cached renderer was found, try and obtain it through its loader.
+        if (renderer == null)
+        {
+            ElmModuleLoader loader = moduleLoaders.get(moduleName);
+
+            if (loader == null)
+            {
+                throw new IllegalStateException("No module loader mapping was found for Elm module: " + moduleName);
+            }
+
+            try
+            {
+                renderer = loader.loadRenderer();
+            }
+            catch (ScriptException | FileNotFoundException e)
+            {
+                throw new IllegalStateException("Failed to load compiled Elm module: " + moduleName, e);
+            }
+        }
+
+        // If caching is enabled, retain the renderer in the cache.
+        if (useCache)
+        {
+            moduleRenderers.put(moduleName, renderer);
+        }
 
         // Render the view.
+        try(Writer writer = new OutputStreamWriter(outputStream, view.getCharset().or(Charsets.UTF_8)))
+        {
+            String result = (String) renderer.runModule(moduleName, elmView.getContent());
+            writer.write(result);
+            writer.flush();
+        }
+        catch (ScriptException e)
+        {
+            throw new IllegalStateException("Elm script failed to run for module: " + moduleName, e);
+        }
     }
 
     /** {@inheritDoc} */

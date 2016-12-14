@@ -136,6 +136,5 @@ public class ElmRenderer
         }
 
         engine.eval(new FileReader(elmJsResourcePath));
-
     }
 }
