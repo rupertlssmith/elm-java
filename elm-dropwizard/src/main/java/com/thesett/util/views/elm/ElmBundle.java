@@ -60,6 +60,9 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
     {
         this.elmBundleConfig = getElmBundleConfig(config);
 
+        // Provide an opportunity for the bundle consumer to configure the module mapping.
+        configureModuleMapping();
+
         // Flatten any configured overrides into a single map.
         List<Map<String, String>> configOverrides = elmBundleConfig.getOverrides();
         Map<String, String> overrides = new HashMap<>();
