@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +46,7 @@ import io.dropwizard.views.ViewRenderer;
 public class ElmViewRenderer implements ViewRenderer
 {
     /** Holds a mapping from module names to loaders for their renderers. */
-    public static Map<String, ElmModuleLoader> moduleLoaders;
+    public static Map<String, ElmModuleLoader> moduleLoaders = new HashMap<>();
 
     /** Indicates whether or not the renderer cache should be used. */
     public static boolean useCache;
