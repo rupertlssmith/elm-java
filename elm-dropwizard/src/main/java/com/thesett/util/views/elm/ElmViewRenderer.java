@@ -70,7 +70,7 @@ public class ElmViewRenderer implements ViewRenderer
         ElmView elmView = (ElmView) view;
 
         // Get the name of the Module.
-        String moduleName = elmView.getTemplateName();
+        String moduleName = elmView.getModuleName();
 
         ElmRenderer renderer = null;
 

@@ -33,10 +33,12 @@ import io.dropwizard.views.View;
  *
  * @author Rupert Smith
  */
-public class ElmView<C> extends View
-{
+public class ElmView<C> extends View {
     /** Holds the content model to render the view from. */
     private final C content;
+
+    /** Holds the name of the Elm module to render with. */
+    private final String moduleName;
 
     /**
      * Creates a view that will render the supplied content model using the static Elm program defined within the named
@@ -45,11 +47,20 @@ public class ElmView<C> extends View
      * @param content    The content model.
      * @param moduleName The Elm module providing the static rendering program.
      */
-    public ElmView(C content, String moduleName)
-    {
+    public ElmView(C content, String moduleName) {
         super(moduleName);
 
         this.content = content;
+        this.moduleName = moduleName;
+    }
+
+    /**
+     * Provides the name of the Elm module to render with.
+     *
+     * @return The name of the Elm module to render with.
+     */
+    public String getModuleName() {
+        return moduleName;
     }
 
     /**
@@ -57,8 +68,7 @@ public class ElmView<C> extends View
      *
      * @return The content model.
      */
-    public C getContent()
-    {
+    public C getContent() {
         return content;
     }
 }
