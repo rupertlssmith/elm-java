@@ -98,6 +98,10 @@ public class ElmViewRenderer implements ViewRenderer
             {
                 throw new IllegalStateException("Failed to load compiled Elm module: " + moduleName, e);
             }
+            catch (Throwable t) {
+                t.printStackTrace();
+                throw t;
+            }
         }
 
         // If caching is enabled, retain the renderer in the cache.
