@@ -17,6 +17,8 @@ package com.thesett.elm;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.script.Invocable;
@@ -122,18 +124,8 @@ public class ElmRenderer
                 " on the classpath.");
         }
 
-        bootResourcePath = ResourceUtils.resourceFilePath(CollectionUtil.first(resources));
-
-        try
-        {
-            engine.eval(new FileReader(bootResourcePath));
-        }
-        catch (FileNotFoundException e)
-        {
-            // Should not happen as the boot script is provided in a known location. Promoting to a bug.
-            throw new IllegalStateException("The Elm Nashorn boot script should load from a known location.", e);
-
-        }
+        InputStream bootResource = ElmRenderer.class.getClassLoader().getResourceAsStream(CollectionUtil.first(resources));
+        engine.eval(new InputStreamReader(bootResource));
 
         engine.eval(new FileReader(elmJsResourcePath));
     }
