@@ -35,6 +35,9 @@ import io.dropwizard.views.ViewRenderer;
  */
 public class ElmViewRenderer implements ViewRenderer
 {
+    public static Map<String, ElmModuleLoader> moduleLoaders;
+    public static boolean useCache;
+
     /**
      * {@inheritDoc}
      *
