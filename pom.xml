@@ -454,6 +454,5 @@
       <module>elm-render</module>
       <module>elm-java-maven-plugin</module>
       <module>elm-dropwizard</module>
-      <module>example</module>
   </modules>
 </project>
