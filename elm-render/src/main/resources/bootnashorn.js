@@ -10,6 +10,8 @@ console.warn = print;
 console.log = print;
 
 function staticElmProgram(moduleName, inputModel) {
+    console.log("inputModel:");
+    console.log(inputModel);
     return Elm[moduleName].program(inputModel);
 }
 
