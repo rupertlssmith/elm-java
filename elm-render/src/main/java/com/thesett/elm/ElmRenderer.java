@@ -26,6 +26,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thesett.util.collections.CollectionUtil;
 import com.thesett.util.resource.ResourceUtils;
 
@@ -89,9 +91,23 @@ public class ElmRenderer
 
         Object result = null;
 
+        ObjectMapper mapper = new ObjectMapper();
+        String inputModelAsString = null;
+
         try
         {
-            result = invocable.invokeFunction(PROGRAM_FUNCTION, moduleName, inputModel);
+            inputModelAsString = mapper.writeValueAsString(inputModel);
+        }
+        catch (JsonProcessingException e)
+        {
+            throw new IllegalStateException(e);
+        }
+        //JSONParser jsonParser = new JSONParser();
+        //JsonObject json = (JsonObject)parser.parse(inputModelAsString);
+
+        try
+        {
+            result = invocable.invokeFunction(PROGRAM_FUNCTION, moduleName, inputModelAsString);
         }
         catch (NoSuchMethodException e)
         {
@@ -124,7 +140,8 @@ public class ElmRenderer
                 " on the classpath.");
         }
 
-        InputStream bootResource = ElmRenderer.class.getClassLoader().getResourceAsStream(CollectionUtil.first(resources));
+        InputStream bootResource =
+            ElmRenderer.class.getClassLoader().getResourceAsStream(CollectionUtil.first(resources));
         engine.eval(new InputStreamReader(bootResource));
 
         engine.eval(new FileReader(elmJsResourcePath));
