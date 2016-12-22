@@ -31,6 +31,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.thesett.util.collections.CollectionUtil;
 import com.thesett.util.resource.ResourceUtils;
 
+import jdk.nashorn.api.scripting.ScriptObjectMirror;
+
 /**
  * ElmRenderer sets up a Nashorn javascript environment with compiled Elm code. Static Elm programs within this code can
  * then be run against input data models.
@@ -102,12 +104,12 @@ public class ElmRenderer
         {
             throw new IllegalStateException(e);
         }
-        //JSONParser jsonParser = new JSONParser();
-        //JsonObject json = (JsonObject)parser.parse(inputModelAsString);
+
+        ScriptObjectMirror jsonInputModel = (ScriptObjectMirror) engine.eval("(" + inputModelAsString + ")");
 
         try
         {
-            result = invocable.invokeFunction(PROGRAM_FUNCTION, moduleName, inputModelAsString);
+            result = invocable.invokeFunction(PROGRAM_FUNCTION, moduleName, jsonInputModel);
         }
         catch (NoSuchMethodException e)
         {
