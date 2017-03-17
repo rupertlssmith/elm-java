@@ -46,9 +46,6 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
     /** Provides a mapping from Elm module names to locations on the classpath where their compiled code is. */
     private final Map<String, String> modulesToClasspath = new HashMap<>();
 
-    /** Holds the config for this bundle. */
-    private ElmBundleConfig elmBundleConfig;
-
     /** {@inheritDoc} */
     public void initialize(Bootstrap<?> bootstrap)
     {
@@ -64,7 +61,8 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
         // Flatten any configured overrides into a single map.
         Map<String, String> overrides = new HashMap<>();
 
-        this.elmBundleConfig = getElmBundleConfig(config);
+        /** Holds the config for this bundle. */
+        ElmBundleConfig elmBundleConfig = getElmBundleConfig(config);
 
         if (elmBundleConfig != null)
         {
@@ -77,6 +75,8 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
                     overrides.putAll(override);
                 }
             }
+
+            ElmViewRenderer.useCache = elmBundleConfig.isCacheTemplates();
         }
 
         // Set up templates to be loaded from the classpath or filesystem for overrides.
@@ -100,7 +100,6 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
             ElmViewRenderer.moduleLoaders = loaders;
         }
 
-        ElmViewRenderer.useCache = elmBundleConfig.isCacheTemplates();
     }
 
     /**
