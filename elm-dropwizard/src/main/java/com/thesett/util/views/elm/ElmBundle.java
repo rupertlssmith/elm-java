@@ -58,20 +58,24 @@ public abstract class ElmBundle<T extends Configuration> implements ConfiguredBu
     /** {@inheritDoc} */
     public void run(T config, Environment environment) throws Exception
     {
-        this.elmBundleConfig = getElmBundleConfig(config);
-
         // Provide an opportunity for the bundle consumer to configure the module mapping.
         configureModuleMapping();
 
         // Flatten any configured overrides into a single map.
-        List<Map<String, String>> configOverrides = elmBundleConfig.getOverrides();
         Map<String, String> overrides = new HashMap<>();
 
-        if (configOverrides != null)
+        this.elmBundleConfig = getElmBundleConfig(config);
+
+        if (elmBundleConfig != null)
         {
-            for (Map<String, String> override : configOverrides)
+            List<Map<String, String>> configOverrides = elmBundleConfig.getOverrides();
+
+            if (configOverrides != null)
             {
-                overrides.putAll(override);
+                for (Map<String, String> override : configOverrides)
+                {
+                    overrides.putAll(override);
+                }
             }
         }
 
