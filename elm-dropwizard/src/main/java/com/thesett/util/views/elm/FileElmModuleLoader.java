@@ -16,6 +16,7 @@
 package com.thesett.util.views.elm;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 
 import javax.script.ScriptException;
 
@@ -41,6 +42,6 @@ public class FileElmModuleLoader implements ElmModuleLoader
     /** {@inheritDoc} */
     public ElmRenderer loadRenderer() throws ScriptException, FileNotFoundException
     {
-        return new ElmRenderer(filePath);
+        return new ElmRenderer(new FileReader(filePath));
     }
 }

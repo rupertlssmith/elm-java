@@ -15,10 +15,7 @@
  */
 package com.thesett.elm;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.List;
 
 import javax.script.Invocable;
@@ -62,16 +59,13 @@ public class ElmRenderer
     /** Holds a reference to the Nashorn execution engine. */
     private ScriptEngine engine;
 
-    /** Holds a path to the boot wrapper javascript. */
-    private String bootResourcePath;
+    /** Holds a character stream to read the compiled Elm JS from. */
+    private Reader elmJsResourceReader;
 
-    /** Holds a path to the compiled Elm javascript. */
-    private final String elmJsResourcePath;
-
-    public ElmRenderer(String elmJsResourcePath) throws ScriptException, FileNotFoundException
+    public ElmRenderer(Reader elmJsResourceReader) throws ScriptException, FileNotFoundException
     {
         nashornLifecycle = new ScriptEngineManager();
-        this.elmJsResourcePath = elmJsResourcePath;
+        this.elmJsResourceReader = elmJsResourceReader;
 
         init();
     }
@@ -146,6 +140,6 @@ public class ElmRenderer
             ElmRenderer.class.getClassLoader().getResourceAsStream(CollectionUtil.first(resources));
         engine.eval(new InputStreamReader(bootResource));
 
-        engine.eval(new FileReader(elmJsResourcePath));
+        engine.eval(elmJsResourceReader);
     }
 }
