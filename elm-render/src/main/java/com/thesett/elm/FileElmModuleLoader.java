@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.util.views.elm;
+package com.thesett.elm;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import javax.script.ScriptException;
-
-import com.thesett.elm.ElmRenderer;
 
 /**
  * <pre><p/><table id="crc"><caption>CRC Card</caption>

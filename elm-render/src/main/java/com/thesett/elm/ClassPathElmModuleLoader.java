@@ -13,33 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.thesett.util.views.elm;
+package com.thesett.elm;
 
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 import javax.script.ScriptException;
 
-import com.thesett.elm.ElmRenderer;
-
 /**
- * ElmModuleLoader abstracts different ways that the code implementing an Elm module can be loaded.
- *
  * <pre><p/><table id="crc"><caption>CRC Card</caption>
- * <tr><th> Responsibilities
+ * <tr><th> Responsibilities <th> Collaborations
  * <tr><td> Load and provide access to an Elm renderer. </td></tr>
  * </table></pre>
  *
  * @author Rupert Smith
  */
-public interface ElmModuleLoader
+public class ClassPathElmModuleLoader implements ElmModuleLoader
 {
-    /**
-     * Provides an Elm renderer.
-     *
-     * @return An Elm renderer.
-     *
-     * @throws ScriptException       If the compiled Elm code fails to load because it contains an error.
-     * @throws FileNotFoundException If the compiled Elm code fails to load because it cannot be found.
-     */
-    ElmRenderer loadRenderer() throws ScriptException, FileNotFoundException;
+    private final String classPathLocation;
+
+    public ClassPathElmModuleLoader(String classPathLocation)
+    {
+        this.classPathLocation = classPathLocation;
+    }
+
+    /** {@inheritDoc} */
+    public ElmRenderer loadRenderer() throws ScriptException, FileNotFoundException
+    {
+        InputStream jsInputStream = ElmRenderer.class.getClassLoader().getResourceAsStream(classPathLocation);
+
+        return new ElmRenderer(new InputStreamReader(jsInputStream));
+    }
 }

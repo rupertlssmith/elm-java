@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.script.ScriptException;
 
 import com.google.common.base.Charsets;
+import com.thesett.elm.ElmModuleLoader;
 import com.thesett.elm.ElmRenderer;
 
 import io.dropwizard.views.View;

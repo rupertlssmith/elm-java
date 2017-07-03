@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.thesett.elm.ClassPathElmModuleLoader;
+import com.thesett.elm.ElmModuleLoader;
+import com.thesett.elm.FileElmModuleLoader;
 import io.dropwizard.Configuration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
