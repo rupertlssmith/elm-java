@@ -82,12 +82,27 @@ public class ElmRenderer
      */
     public Object runModule(String moduleName, Object inputModel) throws ScriptException
     {
+        return runModule(moduleName, inputModel, new ObjectMapper());
+    }
+
+    /**
+     * Runs the static Elm program found in the named module.
+     *
+     * @param  moduleName The name of the module to get the static program from.
+     * @param  inputModel The input model to pass to the program.
+     * @param  mapper     The ObjectMapper to use to serialize the input model.
+     *
+     * @return The output model from the program.
+     *
+     * @throws ScriptException If the javascript code fails to evaluate.
+     */
+    public Object runModule(String moduleName, Object inputModel, ObjectMapper mapper) throws ScriptException
+    {
         // Render the view.
         Invocable invocable = (Invocable) engine;
 
         Object result = null;
 
-        ObjectMapper mapper = new ObjectMapper();
         String inputModelAsString = null;
 
         try
