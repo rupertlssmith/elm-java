@@ -55,6 +55,10 @@ public class BuildElmMojo extends AbstractFrontendMojo
     @Parameter(property = "srcSpec", required = true)
     private String srcSpec;
 
+    /** The output path relative to the project output directory. */
+    @Parameter(property = "outPath", required = true)
+    private String outPath;
+
     /** Skips execution of this mojo. */
     @Parameter(property = "skip.elm", defaultValue = "false")
     private Boolean skip;
@@ -102,9 +106,13 @@ public class BuildElmMojo extends AbstractFrontendMojo
             elmGithubInstallRunner.execute("", environmentVariables);
 
             String artifact = project.getArtifactId();
-
             String outputDirName = project.getBuild().getOutputDirectory();
-            String outputFile = outputDirName  + "/" + artifact + ".js";
+
+            // Trim any leading or trailing path separators from the output path.
+            String outDirectory = outPath.replaceAll("^/+", "");
+            outDirectory = outDirectory.replaceAll("/+$", "");
+
+            String outputFile = outputDirName  + "/" + ("".equals(outDirectory)? "" : outDirectory + "/") + artifact + ".js";
 
             elmMakeRunner.execute(srcSpec + " --output " + outputFile, environmentVariables);
         }
