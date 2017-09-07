@@ -43,6 +43,11 @@ public class ClassPathElmModuleLoader implements ElmModuleLoader
     {
         InputStream jsInputStream = ElmRenderer.class.getClassLoader().getResourceAsStream(classPathLocation);
 
+        if (jsInputStream == null) {
+            throw new FileNotFoundException("Could not find '" + classPathLocation + "' on the classpath.");
+        }
+
+
         return new ElmRenderer(new InputStreamReader(jsInputStream));
     }
 }
