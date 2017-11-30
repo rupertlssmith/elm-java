@@ -4,7 +4,7 @@
     
     <groupId>com.thesett.elm</groupId>
     <artifactId>elm-java</artifactId>
-    <version>1.0.25</version><!--BuildVersion-->
+    <version>1.0-SNAPSHOT</version><!--BuildVersion-->
 
     <packaging>pom</packaging>
 
@@ -17,8 +17,8 @@
         <maven.versions.plugin.version>2.2</maven.versions.plugin.version>
         
         <!-- Versions. -->
-        <jenerator.utils.version>1.0.170</jenerator.utils.version><!--jenerator_utils-BuildVersion-->
-        <unified.validation.version>0.9.151</unified.validation.version>
+        <jenerator.utils.version>1.0.0-SNAPSHOT</jenerator.utils.version><!--jenerator_utils-BuildVersion-->
+        <unified.validation.version>0.0.1-SNAPSHOT</unified.validation.version>
         
         <dropwizard.version>0.9.1</dropwizard.version>
         <dropwizardassetsbundle.version>0.2.0</dropwizardassetsbundle.version>        
@@ -33,8 +33,8 @@
         <commons.compress.version>1.8.1</commons.compress.version>
         <commons.io.version>1.3.2</commons.io.version>
         <commons.logging.version>1.2</commons.logging.version>
-        <jenerator.version>0.9.154</jenerator.version>
-        <lojix.version>0.9.172</lojix.version>
+        <jenerator.version>0.9.0-SNAPSHOT</jenerator.version>
+        <lojix.version>0.9.0-SNAPSHOT</lojix.version>
         <jodatime.version>2.3</jodatime.version>
         <jadira.version>3.0.0.GA</jadira.version>
         <force.wsc.version>32.1.0</force.wsc.version>
@@ -56,7 +56,7 @@
         <lanterna.version>2.1.8</lanterna.version>
         <jersey.version>2.22.1</jersey.version>
         <pegdown.version>1.6.0</pegdown.version>
-        <com.thesett.laf.version>0.9.1321</com.thesett.laf.version>
+        <com.thesett.laf.version>0.9.0-SNAPSHOT</com.thesett.laf.version>
         
         <!--
             The 'sonar.dynamicAnalysis' is needed to prevent sonar from throwing away coverage
