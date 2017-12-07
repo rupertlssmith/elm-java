@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.thesett.elm</groupId>
         <artifactId>elm-java</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.26</version>
     </parent>
 
     <groupId>com.thesett.elm</groupId>
     <artifactId>elm-java-maven-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.26</version>
     <name>${project.artifactId}</name>
     
     <packaging>maven-plugin</packaging>
